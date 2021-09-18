@@ -1,0 +1,30 @@
+/*{
+	"type": "action",
+	"targets": ["omnifocus"],
+	"author": "Dominic Manley",
+	"identifier": "com.dm.dad",
+	"version": "1.0",
+	"description": "This action will drop an action and create a duplicate.  Dupes will NOT be repeatable (if they were originally).",
+	"label": "Drop and Dupe",
+	"shortLabel": "DropDupe"
+}*/
+(() => {
+	var action = new PlugIn.Action(function(selection, sender){
+		var duplicatedTasks = new Array();
+		selection.tasks.forEach(function(task) {
+			insertionLocation = task.before;
+			if(insertionLocation === null) {insertionLocation = inbox.ending;}
+			dupTasks = duplicateTasks([task], insertionLocation);
+			dupTasks[0].repetitionRule = null;
+			duplicatedTasks.push(dupTasks[0].id.primaryKey);
+			task.drop(false);
+			document.windows[0].selectObjects([dupTasks[0]]);
+		});
+	});
+
+	action.validate = function(selection, sender) {
+		return (selection.tasks.length > 0);
+	};
+	
+	return action;
+})();

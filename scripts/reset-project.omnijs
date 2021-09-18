@@ -1,0 +1,25 @@
+/*{
+	"type": "action",
+	"targets": ["omnifocus"],
+	"author": "Dominic Manley",
+	"identifier": "com.dm.reset",
+	"version": "1.0",
+	"description": "This action will reset the status of all child actions in a project.",
+	"label": "Reset Project",
+	"shortLabel": "Reset"
+}*/
+(() => {
+	var action = new PlugIn.Action(function(selection) {
+		selection.projects.forEach(function(project) {
+			project.flattenedTasks.forEach(function(task) {
+				task.markIncomplete();
+			});
+		});
+	});
+
+	action.validate = function(selection, sender) {
+		return (selection.projects.length > 0);
+	};
+
+	return action;
+})();
